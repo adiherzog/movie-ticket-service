@@ -1,16 +1,18 @@
 package com.zuehlke.movieticketservice.domain;
 
+import java.util.List;
+
 public class MovieDetails {
 
-    private int id;
+    private long id;
     private String title;
     private String poster;
     private String plot;
     private int year;
     private String genre;
-    private Rating[] ratings;
+    private List<Rating> ratings;
 
-    public MovieDetails(int id, String title, String poster, String plot, int year, String genre, Rating[] ratings) {
+    public MovieDetails(long id, String title, String poster, String plot, int year, String genre, List<Rating> ratings) {
         this.id = id;
         this.title = title;
         this.poster = poster;
@@ -20,11 +22,11 @@ public class MovieDetails {
         this.ratings = ratings;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -68,11 +70,11 @@ public class MovieDetails {
         this.genre = genre;
     }
 
-    public Rating[] getRatings() {
+    public List<Rating> getRatings() {
         return ratings;
     }
 
-    public void setRatings(Rating[] ratings) {
+    public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
     }
 

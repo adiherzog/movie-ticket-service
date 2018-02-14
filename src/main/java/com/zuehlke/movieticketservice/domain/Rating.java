@@ -26,4 +26,30 @@ public class Rating {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rating rating = (Rating) o;
+
+        if (!source.equals(rating.source)) return false;
+        return value.equals(rating.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = source.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Rating{" +
+                "source='" + source + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
+
 }

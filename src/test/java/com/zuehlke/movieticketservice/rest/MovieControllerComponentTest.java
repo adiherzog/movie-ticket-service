@@ -38,7 +38,7 @@ public class MovieControllerComponentTest {
                 .body("[0].id", equalTo(1))
                 .body("[0].title", equalTo("Batman Begins"))
                 .body("[0].poster", equalTo("https://images-na.ssl-images-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTYwNzUwMTI3._V1_SX300.jpg"))
-                .body("$.size", equalTo(3));
+                .body("$.size", equalTo(7));
         // @formatter:on
     }
 

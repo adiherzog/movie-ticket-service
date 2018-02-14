@@ -1,15 +1,26 @@
 package com.zuehlke.movieticketservice.rest;
 
+import com.zuehlke.movieticketservice.adapter.movie.MovieServiceAdapter;
+import com.zuehlke.movieticketservice.adapter.rating.RatingAdapter;
 import com.zuehlke.movieticketservice.domain.MovieDetails;
 import com.zuehlke.movieticketservice.domain.MovieSummary;
 import com.zuehlke.movieticketservice.domain.Rating;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MovieTicketController {
+
+    private MovieServiceAdapter movieServiceAdapter;
+    private RatingAdapter ratingAdapter;
+
+    public MovieTicketController(MovieServiceAdapter movieServiceAdapter, RatingAdapter ratingAdapter) {
+        this.movieServiceAdapter = movieServiceAdapter;
+        this.ratingAdapter = ratingAdapter;
+    }
 
     @RequestMapping("/hello")
     @ResponseBody
@@ -19,27 +30,23 @@ public class MovieTicketController {
 
     @GetMapping("/api/v1/movies")
     @ResponseBody
-    public MovieSummary[] getMovies() {
-        return new MovieSummary[] {
-                new MovieSummary(1, "Batman Begins", "https://images-na.ssl-images-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTYwNzUwMTI3._V1_SX300.jpg"),
-                new MovieSummary(2, "Ted", "https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ1OTU0ODcxMV5BMl5BanBnXkFtZTcwOTMxNTUwOA@@._V1_SX300.jpg"),
-                new MovieSummary(3, "Inception", "https://images-na.ssl-images-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg")
-        };
+    public List<MovieSummary> getMovies() {
+        return new MovieServiceAdapter("https://movie-service.herokuapp.com").getAll();
     }
 
     @GetMapping("/api/v1/movies/{id}")
     @ResponseBody
-    public MovieDetails getMovieDetails() {
-        return new MovieDetails(
-                1,
-                "Batman Begins",
-                "https://images-na.ssl-images-amazon.com/images/M/MV5BNTM3OTc0MzM2OV5BMl5BanBnXkFtZTYwNzUwMTI3._V1_SX300.jpg",
-                "After training with his mentor, Batman begins his fight to free crime-ridden Gotham City from the corruption that Scarecrow and the League of Shadows have cast upon it.",
-                2005,
-                "Action",
-                new Rating[]{
-                        new Rating("Internet Movie Database", "8.3/10"), new Rating("Rotten Tomatoes", "84%")
-                });
+    public MovieDetails getMovieDetails(@PathVariable("id") long id) {
+        Optional<MovieDetails> optionalMovie = movieServiceAdapter.getMovieById(id);
+
+        if(!optionalMovie.isPresent()) {
+            throw new NotFoundException();
+        }
+        MovieDetails movie = optionalMovie.get();
+
+        List<Rating> ratings = ratingAdapter.getRatingsById(id);
+        movie.setRatings(ratings);
+        return movie;
     }
 
 }
