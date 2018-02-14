@@ -5,11 +5,12 @@ import feign.RequestLine;
 
 import java.util.List;
 
-public interface MovieService {
+public interface MovieClient {
 
     @RequestLine("GET /api/v1/movies")
     List<MovieServiceResponse> getMovies();
 
     @RequestLine("GET /api/v1/movies/{id}")
     MovieServiceResponse getMovieDetails(@Param("id") long id);
+
 }

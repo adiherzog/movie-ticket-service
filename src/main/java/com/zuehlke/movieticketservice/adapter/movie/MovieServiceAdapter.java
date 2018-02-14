@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 
 public class MovieServiceAdapter {
 
-    private MovieService movieService;
+    private MovieClient movieClient;
 
     public MovieServiceAdapter(String url) {
-        movieService = FeignClientFactory.create(url, MovieService.class);
+        movieClient = FeignClientFactory.create(url, MovieClient.class);
     }
 
     public List<MovieSummary> getAll() {
-        List<MovieServiceResponse> movies = movieService.getMovies();
+        List<MovieServiceResponse> movies = movieClient.getMovies();
 
         return movies
             .stream()
@@ -30,7 +30,7 @@ public class MovieServiceAdapter {
         MovieServiceResponse movieDetails;
 
         try {
-            movieDetails = movieService.getMovieDetails(id);
+            movieDetails = movieClient.getMovieDetails(id);
         } catch(FeignException e) {
             return Optional.empty();
         }

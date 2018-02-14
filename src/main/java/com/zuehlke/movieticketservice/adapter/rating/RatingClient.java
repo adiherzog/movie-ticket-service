@@ -5,7 +5,7 @@ import feign.RequestLine;
 
 import java.util.List;
 
-public interface RatingService {
+public interface RatingClient {
 
     @RequestLine("GET /api/v1/ratings/{id}")
     List<MovieRatingsResponse> getRatings(@Param("id") long id);
